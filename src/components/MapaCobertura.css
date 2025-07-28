@@ -1,0 +1,144 @@
+.mapa-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  padding: 10px 0;
+  text-align: left;
+}
+
+.logo {
+  height: 40px;
+}
+
+.controls-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.controls-container h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  align-items: end;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.select-control {
+  padding: 10px 12px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: white;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.select-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.select-control:disabled {
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.btn-limpiar {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-height: 42px;
+}
+
+.btn-limpiar:hover {
+  background-color: #5a6268;
+}
+
+.btn-limpiar:active {
+  background-color: #495057;
+  transform: translateY(1px);
+}
+
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 600px;
+  font-size: 18px;
+  color: #666;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .mapa-container {
+    padding: 5px;
+  }
+  
+  .controls-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .controls-container {
+    padding: 15px;
+  }
+  
+  .controls-container h2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .select-control,
+  .btn-limpiar {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  
+  .logo {
+    height: 30px;
+  }
+}
