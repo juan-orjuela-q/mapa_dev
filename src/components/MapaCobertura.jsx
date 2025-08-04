@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import { provincias, cantones, distritos } from '../data/costaRicaData';
+import { provincias, cantones, distritos } from '../data/costaRicaDataComplete';
 import './MapaCobertura.css';
 
 const containerStyle = {
   width: '100%',
-  height: '600px'
+  height: '100%'
 };
 
 const center = {
@@ -33,6 +33,7 @@ const MapaCobertura = () => {
   const [selectedDistrito, setSelectedDistrito] = useState('');
   const [availableCantones, setAvailableCantones] = useState([]);
   const [availableDistritos, setAvailableDistritos] = useState([]);
+  const [kmlStatus, setKmlStatus] = useState('');
   const geocoder = useRef(null);
 
   const onLoad = useCallback(function callback(map) {
@@ -53,15 +54,31 @@ const MapaCobertura = () => {
 
   const loadKmlLayer = (mapInstance) => {
     if (window.google && mapInstance) {
+      // URL del archivo KML en Google Drive (enlace directo de descarga)
+      const kmlUrl = 'https://drive.google.com/uc?export=download&id=1N0rwBflag42Y2hr1CbjnlPLH5GgY0Q1s';
+      console.log('Intentando cargar KML desde Google Drive:', kmlUrl);
+      
       const kml = new window.google.maps.KmlLayer({
-        url: `${window.location.origin}/cobertura.kmz?v=${Date.now()}`,
+        url: kmlUrl,
         map: mapInstance,
         preserveViewport: false,
         suppressInfoWindows: false
       });
 
       kml.addListener('status_changed', () => {
-        console.log('KML Status:', kml.getStatus());
+        const status = kml.getStatus();
+        console.log('KML Status:', status);
+        setKmlStatus(status);
+        
+        if (status === 'DOCUMENT_NOT_FOUND') {
+          console.error('Archivo KML no encontrado en Google Drive');
+        } else if (status === 'FETCH_ERROR') {
+          console.error('Error al obtener el archivo KML desde Google Drive');
+        } else if (status === 'INVALID_DOCUMENT') {
+          console.error('El archivo KML no es válido');
+        } else if (status === 'OK') {
+          console.log('Archivo KML cargado exitosamente desde Google Drive');
+        }
       });
     }
   };
@@ -152,88 +169,95 @@ const MapaCobertura = () => {
 
   return isLoaded ? (
     <div className="mapa-container">
-      <div className="header">
-        <img src="/logo-ifx--primary.svg" alt="Logo" className="logo" />
-      </div>
       
-      <div className="controls-container">
-        <h2>Mapa de Cobertura de Costa Rica</h2>
-        
-        <div className="controls-grid">
-          <div className="control-group">
-            <label htmlFor="provincia">Provincia:</label>
-            <select 
-              id="provincia"
-              value={selectedProvincia} 
-              onChange={handleProvinciaChange}
-              className="select-control"
-            >
-              <option value="">Seleccione una provincia</option>
-              {provincias.map(provincia => (
-                <option key={provincia.id} value={provincia.id}>
-                  {provincia.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+      
+      <div className="main-content">
+        <div className="controls-sidebar">
+      <div className="brand"><img src="/logotipo_ifx.svg" alt="Logo" className="logo" /></div>
+          <h1>Mapa de Cobertura</h1>
+          
+          {kmlStatus && (
+            <div className={`kml-status ${kmlStatus === 'OK' ? 'success' : 'error'}`}>
+              Estado de cobertura: {kmlStatus === 'OK' ? 'Cargado ✓' : `Error: ${kmlStatus}`}
+            </div>
+          )}
+          
+          <div className="controls-grid">
+            <div className="control-group">
+              <label htmlFor="provincia">Provincia:</label>
+              <select 
+                id="provincia"
+                value={selectedProvincia} 
+                onChange={handleProvinciaChange}
+                className="select-control"
+              >
+                <option value="">Seleccione una provincia</option>
+                {provincias.map(provincia => (
+                  <option key={provincia.id} value={provincia.id}>
+                    {provincia.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="control-group">
-            <label htmlFor="canton">Cantón:</label>
-            <select 
-              id="canton"
-              value={selectedCanton} 
-              onChange={handleCantonChange}
-              disabled={!selectedProvincia}
-              className="select-control"
-            >
-              <option value="">Seleccione un cantón</option>
-              {availableCantones.map(canton => (
-                <option key={canton.id} value={canton.id}>
-                  {canton.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="control-group">
+              <label htmlFor="canton">Cantón:</label>
+              <select 
+                id="canton"
+                value={selectedCanton} 
+                onChange={handleCantonChange}
+                disabled={!selectedProvincia}
+                className="select-control"
+              >
+                <option value="">Seleccione un cantón</option>
+                {availableCantones.map(canton => (
+                  <option key={canton.id} value={canton.id}>
+                    {canton.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="control-group">
-            <label htmlFor="distrito">Distrito:</label>
-            <select 
-              id="distrito"
-              value={selectedDistrito} 
-              onChange={handleDistritoChange}
-              disabled={!selectedCanton}
-              className="select-control"
-            >
-              <option value="">Seleccione un distrito</option>
-              {availableDistritos.map(distrito => (
-                <option key={distrito.id} value={distrito.id}>
-                  {distrito.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="control-group">
+              <label htmlFor="distrito">Distrito:</label>
+              <select 
+                id="distrito"
+                value={selectedDistrito} 
+                onChange={handleDistritoChange}
+                disabled={!selectedCanton}
+                className="select-control"
+              >
+                <option value="">Seleccione un distrito</option>
+                {availableDistritos.map(distrito => (
+                  <option key={distrito.id} value={distrito.id}>
+                    {distrito.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="control-group">
-            <button 
-              onClick={handleLimpiar}
-              className="btn-limpiar"
-            >
-              Limpiar
-            </button>
+            <div className="control-group">
+              <button 
+                onClick={handleLimpiar}
+                className="btn-limpiar"
+              >
+                Limpiar
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="map-container">
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={8}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          options={mapOptions}
-        >
-        </GoogleMap>
+        <div className="map-container">
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={8}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+            options={mapOptions}
+          >
+          </GoogleMap>
+        </div>
       </div>
     </div>
   ) : <div className="loading">Cargando mapa...</div>;
