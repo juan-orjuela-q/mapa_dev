@@ -173,7 +173,15 @@ const MapaCobertura = () => {
       
       <div className="main-content">
         <div className="controls-sidebar">
-      <div className="brand"><img src="/logotipo_ifx.svg" alt="Logo" className="logo" /></div>
+          <div className="brand">
+            <img 
+              src={`${import.meta.env.BASE_URL}logo.svg`} 
+              alt="Logo Mapa de Cobertura" 
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
+          </div>
           <h1>Mapa de Cobertura</h1>
           
           {kmlStatus && (
