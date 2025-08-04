@@ -175,7 +175,7 @@ const MapaCobertura = () => {
         <div className="controls-sidebar">
           <div className="brand">
             <img 
-              src={`${import.meta.env.BASE_URL}logo.svg`} 
+              src={`${import.meta.env.BASE_URL}logotipo_ifx.svg`} 
               alt="Logo Mapa de Cobertura" 
               onError={(e) => {
                 e.target.style.display = 'none';
