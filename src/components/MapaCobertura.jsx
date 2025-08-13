@@ -55,7 +55,7 @@ const MapaCobertura = () => {
   const loadKmlLayer = (mapInstance) => {
     if (window.google && mapInstance) {
       // URL del archivo KML en Google Drive (enlace directo de descarga)
-      const kmlUrl = 'https://drive.google.com/uc?export=download&id=1N0rwBflag42Y2hr1CbjnlPLH5GgY0Q1s';
+      const kmlUrl = 'https://drive.google.com/uc?export=download&id=1yLPQD4wMdnkHXQ1xaCyix507amGJUnah';
       console.log('Intentando cargar KML desde Google Drive:', kmlUrl);
       
       const kml = new window.google.maps.KmlLayer({
